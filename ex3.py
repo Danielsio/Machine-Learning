@@ -324,8 +324,6 @@ def survival_vs_gender(df):
 
     survived_by_gender = {"male": man_rate, "female": woman_rate}
 
-    print(survived_by_gender)
-
     return survived_by_gender
 
 
@@ -352,44 +350,50 @@ def survival_vs_class(df):
     return survived_by_class
 
 
-# ## 3.3 The same, for survival by the three family size metrics. Return a dict of dicts / series
-# def survival_vs_family(df):
-#
-#     '''
-#     The different family size metrics - "SibSp", "Parch", "Family" are all numeric.
-#     '''
-#
-#     survived_by_family = {}
-#
-#     for metric in ["SibSp", "Parch", "Family"]:
-#
-#         #! your code here
-#         survived_by_metric = {  <your code here>:  <your code here> }
-#
-#         # Example for survived_by_metric:
-#         # survived_by_metric = {0: 0.2, 1: 0.3, 2: 0.35, 4: 0.5...}
-#         # here the keys are unique values of each metric, and the values are the survival probability.
-#         # So in this example, we got 4 unique values for the metric - 0,1,2,4 ,
-#         and the corresponding survival probabilities are 0.2, 0.3, 0.35, 0.5
-#
-#         print("Family metric: ", metric)
-#         print("Survival stats:")
-#         print(survived_by_metric)
-#
-#         survived_by_family[metric] = survived_by_metric
-#
-#
-#       #! What survival metric with what value ensures the highest probability of survival?
-#       #! Complete the following print statement after inspecting the results
-#
-#       #! your code here
-#       print("To ensure the highest chance of survival, the metric ", <your code here>,
-#             'must have the value ', <your code here> )
-#
-#
-#       return survived_by_family
-#
-#
+# # 3.3 The same, for survival by the 3 family size metrics. Return a dict of (dicts \ series)
+def survival_vs_family(df):
+
+    '''
+    The different family size metrics - "SibSp", "Parch", "Family" are all numeric.
+    '''
+
+    survived_by_family = {}
+
+    for metric in ["SibSp", "Parch", "Family"]:
+
+        survived_by_metric = {}
+        uniqueArrValues = df[metric].unique()
+        for uniqueVal in uniqueArrValues:
+            df_onlyMetric = df[df[metric] == uniqueVal]
+            rate = df_onlyMetric["Survived"].mean()
+            survived_by_metric[uniqueVal] = rate
+
+        # Example for survived_by_metric:
+        # survived_by_metric = {0: 0.2, 1: 0.3, 2: 0.35, 4: 0.5...}
+        # here the keys are unique values of each metric, and the values are the survival probability.
+        # So in this example, we got 4 unique values for the metric - 0,1,2,4 ,
+        # and the corresponding survival probabilities are 0.2, 0.3, 0.35, 0.5
+
+        print("Family metric: ", metric)
+        print("Survival stats:")
+        print(survived_by_metric)
+        survived_by_family[metric] = survived_by_metric
+
+
+      # !What survival metric with what value ensures the highest probability of survival?
+      # !Complete the following print statement after inspecting the results
+
+    Family_rate = pd.Series(survived_by_family["Family"]).mean()
+    Parch_rate = pd.Series(survived_by_family["Parch"]).mean()
+    SibSp_rate = pd.Series(survived_by_family["SibSp"]).mean()
+
+    print("To ensure the highest chance of survival, the metric ", "Family", 'must have the value ', max(Family_rate, Parch_rate, SibSp_rate))
+    ## check if works fine
+
+
+    return survived_by_family
+
+
 # ## 3.4 Visualizing the distribution of age and its impact on survival
 # def survival_vs_age(df):
 #     '''
