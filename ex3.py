@@ -143,8 +143,7 @@ def fill_titanic_nas(df_lean):
     avgAge = df_filled.Age.mean()
     df_filled.Age = df_filled.Age.where(list(df_filled.Age.notna().values), other=avgAge)
 
-    index = df_filled["Embarked"].value_counts()
-    indexMax = index.idxmax
+    indexMax = df_filled["Embarked"].value_counts()
 
     df_filled.Embarked = df_filled.Embarked.where(list(df_filled.Embarked.notna().values), other=str(indexMax))
 
@@ -230,8 +229,8 @@ def encode_one_hot(df_filled):
     # original columns, although it is not necessary.
 
     dummies = pd.get_dummies(df_filled.Embarked)
-    print(dummies.columns.values)
-    dummies.rename(columns={"S": "Emb_S", "C": "Emb_C", "Q": "Emb_Q"})
+    #print(dummies.columns.values)
+    #dummies.rename(columns={"S": "Emb_S", "C": "Emb_C", "Q": "Emb_Q"})
     # return df_one_hot
 
 
