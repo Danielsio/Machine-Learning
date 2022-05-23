@@ -143,9 +143,9 @@ def fill_titanic_nas(df_lean):
     avgAge = df_filled.Age.mean()
     df_filled.Age = df_filled.Age.where(list(df_filled.Age.notna().values), other=avgAge)
 
-    indexMax = df_filled["Embarked"].value_counts()
-
-    df_filled.Embarked = df_filled.Embarked.where(list(df_filled.Embarked.notna().values), other=str(indexMax))
+    indexMax = df_filled["Embarked"].mode()
+    indexMax = indexMax.values[0]
+    df_filled.Embarked.fillna(indexMax, inplace=True)
 
     return df_filled
 
