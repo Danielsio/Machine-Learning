@@ -241,10 +241,8 @@ def encode_one_hot(df_filled):
     # print(df_filled)
 
     dummies3 = pd.get_dummies(df_filled.Sex)
-    print(dummies3)
     dummies3.rename(columns={"male": "Bin_Sex"}, inplace=True)
     df_filled = df_filled.join(dummies3[["Bin_Sex"]])
-    print(df_filled)
 
     df_one_hot = df_filled
     # *** NOTE ***: after encoding by one-hot, we may delete the
@@ -256,21 +254,19 @@ def encode_one_hot(df_filled):
 
 
 # 2.4
-# There are 2 variables (columns) that reflect co-travelling family of each passenger.
-# SibSp - the number of sibling - brothers and sisters.
-# Parch - the total number of parents plus children for each passenger.
-# We want to reflect the whole family size of each passenger - the sum of SibSp and Parch
-# It will be useful later
-# def make_family(df_one_hot):
-#
-#     '''
-#     Introduce a new column with the name "Family", that will be the sum of "SibSp" and "Parch" columns
-#     '''
-#
-#     df_one_hot['Family'] = df_one_hot.Parch + df_one_hot.SibSp
-#
-#     return df_one_hot
-#
+    # There are 2 variables (columns) that reflect co-travelling family of each passenger.
+    # SibSp - the number of sibling - brothers and sisters.
+    # Parch - the total number of parents plus children for each passenger.
+    # We want to reflect the whole family size of each passenger - the sum of SibSp and Parch
+    # It will be useful later
+def make_family(df_one_hot):
+
+    '''
+    Introduce a new column with the name "Family", that will be the sum of "SibSp" and "Parch" columns
+    '''
+    df_one_hot['Family'] = df_one_hot.Parch + df_one_hot.SibSp
+    return df_one_hot
+
 
 # 2.5 Feature Transformation
 # In many cases, it is the *multiplicative* change in some
@@ -286,47 +282,54 @@ def encode_one_hot(df_filled):
 # This will be useful later
 
 
-# def add_log1p(df_one_hot):
-#
-#     # For each of the numeric columns: 'Age', 'SibSp', 'Parch', 'Fare', 'Family'
-#     # we introduce a new column that starts with the 'log1p_' string: 'log1p_Age',
-#     'log1p_SibSp', 'log1p_Parch', 'log1p_Fare', 'log1p_Family'
-#
-#     for col in ['Age', 'SibSp', 'Parch', 'Fare', 'Family']:
-#         df_one_hot['log1p_' + col] = np.log1p(df_one_hot[col])
-#
-#     return df_one_hot
-#
+def add_log1p(df_one_hot):
 
-# # 3. Basic exploration of survival.
-# # This section deals with correlations of the "Survived" column to various other data about the passengers.
-# # Also, in this section, we can still use the df_filled DataFrame, without "one-hot" encoding. It is up to you.
-# ## 3.1. Survival vs gender
-# def survival_vs_gender(df):
-#     '''
-#     What is the survival rate for women and men?
-#     '''
-#
-#     #! Compute the survival rate of women and men. That is, compute the percentage of survived women and survived men.
-#     #! Gender is specified in the "Sex" column.
-#     #! You should - but do not have to - do it by defining a view of the DataFrame
-#     that includes, for example, only men, and then computing the average of "Survived"
-#     #! For example:
-#     #! df_male = df[df['Sex']=='male']
-#     #! Now, compute the average of "Survived":
-#     #! df_male["Survived"].mean()
-#
-#     #! your code here
-#     #! Return the result in a dict or a series. Your keys for dict / index
-#     for Series should be the strings "male", "female"
-#     survived_by_gender = {"male": <your code here>, "female": <your code here>}
-#
-#     print(survived_by_gender)
-#
-#     return survived_by_gender
-#
-#
-# ## 3.2 The same for survival by class. You can use the "one-hot" encoding,
+    # For each of the numeric columns: 'Age', 'SibSp', 'Parch', 'Fare', 'Family'
+    # we introduce a new column that starts with the 'log1p_' string: 'log1p_Age',
+    # 'log1p_SibSp', 'log1p_Parch', 'log1p_Fare', 'log1p_Family'
+
+    for col in ['Age', 'SibSp', 'Parch', 'Fare', 'Family']:
+        df_one_hot['log1p_' + col] = np.log1p(df_one_hot[col])
+
+    return df_one_hot
+
+
+# 3. Basic exploration of survival.
+# This section deals with correlations of the "Survived" column to various other data about the passengers.
+# Also, in this section, we can still use the df_filled DataFrame, without "one-hot" encoding. It is up to you.
+# 3.1. Survival vs gender
+def survival_vs_gender(df):
+    '''
+    What is the survival rate for women and men?
+    '''
+
+    # ! Compute the survival rate of women and men. That is, compute the percentage of survived women and survived men.
+    # ! Gender is specified in the "Sex" column.
+    # ! You should - but do not have to - do it by defining a view of the DataFrame
+    # that includes, for example, only men, and then computing the average of "Survived"
+    # ! For example:
+    # ! df_male = df[df['Sex']=='male']
+    # ! Now, compute the average of "Survived":
+    # ! df_male["Survived"].mean()
+
+    df_male = df[df['Sex'] == 'male']
+    man_rate = df_male["Survived"].mean() * 100
+
+    df_female = df[df['Sex'] == 'female']
+    woman_rate = df_female["Survived"].mean() * 100
+
+    # ! your code here
+    # ! Return the result in a dict or a series.
+    # Your keys for dict / index for Series should be the strings "male", "female"
+
+    survived_by_gender = {"male": man_rate, "female": woman_rate}
+
+    print(survived_by_gender)
+
+    return survived_by_gender
+
+
+ ## 3.2 The same for survival by class. You can use the "one-hot" encoding,
 # or the original "Pclass" column - whatever more convenient to you.
 # def survival_vs_class(df):
 #
