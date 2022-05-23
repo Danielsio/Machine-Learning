@@ -225,30 +225,36 @@ def encode_one_hot(df_filled):
     # ! your code here. Hint: you are strongly encouraged to use
     # pd.get_dummies(...) function    # and then rename the columns.
 
-#     dummies1 = pd.get_dummies(df_filled.Embarked)
-#     dummies1.rename(columns={"S": "Emb_S", "C": "Emb_C", "Q": "Emb_Q"}, inplace=True)
-#     df_filled = df_filled.join(dummies1)
-#
-#     dummies2 = pd.get_dummies(df_filled.Pclass)
-#     dummies2.rename(columns={1: "Cls_1", 2: "Cls_2", 3: "Cls_3"}, inplace=True)
-#     df_filled = df_filled.join(dummies2)
-#
-#     # replacing sex values to binary values with : male -> 1, female-> 0
-#
-#     df_filled.rename(columns={"Sex": "Bin_Sex"}, inplace=True)
-#     df_filled.replace("male", 1, inplace=True)
-#     df_filled.replace("female", 0, inplace=True)
-#     print(df_filled)
-#
-#     df_one_hot = df_filled
-#     # *** NOTE ***: after encoding by one-hot, we may delete the
-#     # original columns, although it is not necessary.
-#
-#     df_one_hot.drop(["Embarked", "Pclass"], axis=1, inplace=True)
-#
-#     return df_one_hot
-#
-#
+    dummies1 = pd.get_dummies(df_filled.Embarked)
+    dummies1.rename(columns={"S": "Emb_S", "C": "Emb_C", "Q": "Emb_Q"}, inplace=True)
+    df_filled = df_filled.join(dummies1)
+
+    dummies2 = pd.get_dummies(df_filled.Pclass)
+    dummies2.rename(columns={1: "Cls_1", 2: "Cls_2", 3: "Cls_3"}, inplace=True)
+    df_filled = df_filled.join(dummies2)
+
+    # replacing sex values to binary values with : male -> 1, female-> 0
+
+    # df_filled.rename(columns={"Sex": "Bin_Sex"}, inplace=True)
+    # df_filled.replace("male", 1, inplace=True)
+    # df_filled.replace("female", 0, inplace=True)
+    # print(df_filled)
+
+    dummies3 = pd.get_dummies(df_filled.Sex)
+    print(dummies3)
+    dummies3.rename(columns={"male": "Bin_Sex"}, inplace=True)
+    df_filled = df_filled.join(dummies3[["Bin_Sex"]])
+    print(df_filled)
+
+    df_one_hot = df_filled
+    # *** NOTE ***: after encoding by one-hot, we may delete the
+    # original columns, although it is not necessary.
+
+    df_one_hot.drop(["Embarked", "Pclass"], axis=1, inplace=True)
+
+    return df_one_hot
+
+
 # 2.4
 # There are 2 variables (columns) that reflect co-travelling family of each passenger.
 # SibSp - the number of sibling - brothers and sisters.
@@ -291,7 +297,7 @@ def encode_one_hot(df_filled):
 #
 #     return df_one_hot
 #
-#
+
 # # 3. Basic exploration of survival.
 # # This section deals with correlations of the "Survived" column to various other data about the passengers.
 # # Also, in this section, we can still use the df_filled DataFrame, without "one-hot" encoding. It is up to you.
