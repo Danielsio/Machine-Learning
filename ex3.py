@@ -313,10 +313,10 @@ def survival_vs_gender(df):
     # ! df_male["Survived"].mean()
 
     df_male = df[df['Sex'] == 'male']
-    man_rate = df_male["Survived"].mean() * 100
+    man_rate = df_male["Survived"].mean()
 
     df_female = df[df['Sex'] == 'female']
-    woman_rate = df_female["Survived"].mean() * 100
+    woman_rate = df_female["Survived"].mean()
 
     # ! your code here
     # ! Return the result in a dict or a series.
@@ -329,21 +329,29 @@ def survival_vs_gender(df):
     return survived_by_gender
 
 
- ## 3.2 The same for survival by class. You can use the "one-hot" encoding,
+# 3.2 The same for survival by class. You can use the "one-hot" encoding,
 # or the original "Pclass" column - whatever more convenient to you.
-# def survival_vs_class(df):
-#
-#     #! your code here
-#     #! Return the result in a dict or a series. Your keys for dict / index
-#     for Series should be the strings "Cls_1", "Cls_2", "Cls_3"
-#     # For instance: survived_by_class = {"Cls_1": .25, "Cls_2": .35, "Cls_3": .45}
-#
-#     survived_by_class = {"Cls_1": <your code here>, "Cls_2": <your code here>, "Cls_3": <your code here>}
-#     print(survived_by_class)
-#
-#     return survived_by_class
-#
-#
+def survival_vs_class(df):
+
+    df_class1 = df[df['Pclass'] == 1]
+    class1_rate = df_class1["Survived"].mean()
+
+    df_class2 = df[df['Pclass'] == 2]
+    class2_rate = df_class2["Survived"].mean()
+
+    df_class3 = df[df['Pclass'] == 3]
+    class3_rate = df_class3["Survived"].mean()
+
+    # ! Return the result in a dict or a series.
+    # Your keys for dict / index    # for Series should be the strings "Cls_1", "Cls_2", "Cls_3"
+    # For instance: survived_by_class = {"Cls_1": .25, "Cls_2": .35, "Cls_3": .45}
+
+    survived_by_class = {"Cls_1": class1_rate, "Cls_2": class2_rate, "Cls_3": class3_rate}
+    print(survived_by_class)
+
+    return survived_by_class
+
+
 # ## 3.3 The same, for survival by the three family size metrics. Return a dict of dicts / series
 # def survival_vs_family(df):
 #
