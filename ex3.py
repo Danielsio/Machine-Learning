@@ -224,22 +224,38 @@ def encode_one_hot(df_filled):
 
     # ! your code here. Hint: you are strongly encouraged to use
     # pd.get_dummies(...) function    # and then rename the columns.
-    # df_one_hot = <your code here>
+
+    dummies1 = pd.get_dummies(df_filled.Embarked)
+    dummies1.rename(columns={"S": "Emb_S", "C": "Emb_C", "Q": "Emb_Q"}, inplace=True)
+    df_filled = df_filled.join(dummies1)
+
+    dummies2 = pd.get_dummies(df_filled.Pclass)
+    dummies2.rename(columns={1: "Cls_1", 2: "Cls_2", 3: "Cls_3"}, inplace=True)
+    df_filled = df_filled.join(dummies2)
+
+    # replacing sex values to binary values with : male -> 1, female-> 0
+
+    df_filled.rename(columns={"Sex": "Bin_Sex"}, inplace=True)
+    df_filled.replace("male", 1, inplace=True)
+    df_filled.replace("female", 0, inplace=True)
+    print(df_filled)
+
+    df_one_hot = df_filled
     # *** NOTE ***: after encoding by one-hot, we may delete the
     # original columns, although it is not necessary.
 
-    dummies = pd.get_dummies(df_filled.Embarked)
-    #print(dummies.columns.values)
-    #dummies.rename(columns={"S": "Emb_S", "C": "Emb_C", "Q": "Emb_Q"})
-    # return df_one_hot
+    df_one_hot.drop(["Embarked", "Pclass"], axis=1, inplace=True)
+    print(df_one_hot)
+
+    return df_one_hot
 
 
-# ## 2.4
-# ## There are 2 variables (columns) that reflect co-travelling family of each passenger.
-# ## SibSp - the number of sibling - brothers and sisters.
-# ## Parch - the total number of parents plus children for each passenger.
-# ## We want to reflect the whole family size of each passenger - the sum of SibSp and Parch
-# ## It will be useful later
+# # 2.4
+# # There are 2 variables (columns) that reflect co-travelling family of each passenger.
+# # SibSp - the number of sibling - brothers and sisters.
+# # Parch - the total number of parents plus children for each passenger.
+# # We want to reflect the whole family size of each passenger - the sum of SibSp and Parch
+# # It will be useful later
 # def make_family(df_one_hot):
 #
 #     '''
@@ -251,7 +267,7 @@ def encode_one_hot(df_filled):
 #
 #     return df_one_hot
 #
-#
+
 # 2.5 Feature Transformation
 # In many cases, it is the *multiplicative* change in some
 # numeric variable that affects the outcome, not the *additive* one.
@@ -349,7 +365,7 @@ def encode_one_hot(df_filled):
 #
 #
 #       #! What survival metric with what value ensures the highest probability of survival?
-#       #! Complete the following print statement after inspecting the reuslts
+#       #! Complete the following print statement after inspecting the results
 #
 #       #! your code here
 #       print("To ensure the highest chance of survival, the metric ", <your code here>,
