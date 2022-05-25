@@ -261,9 +261,9 @@ def encode_one_hot(df_filled):
     # It will be useful later
 def make_family(df_one_hot):
 
-    '''
+    """
     Introduce a new column with the name "Family", that will be the sum of "SibSp" and "Parch" columns
-    '''
+    """
     df_one_hot['Family'] = df_one_hot.Parch + df_one_hot.SibSp
     return df_one_hot
 
@@ -299,9 +299,9 @@ def add_log1p(df_one_hot):
 # Also, in this section, we can still use the df_filled DataFrame, without "one-hot" encoding. It is up to you.
 # 3.1. Survival vs gender
 def survival_vs_gender(df):
-    '''
+    """
     What is the survival rate for women and men?
-    '''
+    """
 
     # ! Compute the survival rate of women and men. That is, compute the percentage of survived women and survived men.
     # ! Gender is specified in the "Sex" column.
@@ -353,9 +353,9 @@ def survival_vs_class(df):
 # # 3.3 The same, for survival by the 3 family size metrics. Return a dict of (dicts \ series)
 def survival_vs_family(df):
 
-    '''
+    """
     The different family size metrics - "SibSp", "Parch", "Family" are all numeric.
-    '''
+    """
 
     survived_by_family = {}
 
@@ -379,91 +379,116 @@ def survival_vs_family(df):
         print(survived_by_metric)
         survived_by_family[metric] = survived_by_metric
 
-
-      # !What survival metric with what value ensures the highest probability of survival?
-      # !Complete the following print statement after inspecting the results
+    # !What survival metric with what value ensures the highest probability of survival?
+    # !Complete the following print statement after inspecting the results
 
     Family_rate = pd.Series(survived_by_family["Family"]).mean()
     Parch_rate = pd.Series(survived_by_family["Parch"]).mean()
     SibSp_rate = pd.Series(survived_by_family["SibSp"]).mean()
 
-    print("To ensure the highest chance of survival, the metric ", "Family", 'must have the value ', max(Family_rate, Parch_rate, SibSp_rate))
-    ## check if works fine
-
+    print("To ensure the highest chance of survival, the metric ", "Family", 'must have the value ', Family_rate)
+    # check if works fine
 
     return survived_by_family
 
 
-# ## 3.4 Visualizing the distribution of age and its impact on survival
-# def survival_vs_age(df):
-#     '''
-#     Here we would like to plot some histograms.
-#     Some very basic plotting: run these three commands:
-#
-#     plt.plot(np.arange(10))
-#     plt.plot(np.arange(10)**.5)
-#     plt.plot(np.arange(10)**2)
-#
-#     You should get 3 lines on a single figure. While that is a desirable functionality,
-#     things can quickly go out of hand if you do not close or clear your figures.
-#
-#     To prevent clogging your figures with clutter, you can do one of several things:
-#
-#     1. put:
-#     plt.close('all')
-#     at the beginning of this function. This will close all figures, all subsequent plots will be "new"
-#
-#     2. Naming your figures and closing / clearing them before the first plot in the function.
-#
-#     2.1. Closing:
-#
-#     plt.close('abc') # closes figure "abc", no error raised if it does not exist.
-#     plt.figure('abc') # opens a brand, empy figure named "abc"
-#     plt.plot(...)
-#     df[...].hist()
-#
-#     2.1. clearing:
-#
-#     Here the order is reversed
-#
-#     plt.figure('abc') # makes "abc" the active figure, makes a new figure named "abc" if it does not exist
-#     plt.clear('abc') # clears the figure "abc", leaving it empty and active to receive plots
-#     plt.plot(...)
-#     df[...].hist()
-#
-#
-#     Now, back to age histogram (distributions)
-#     First, define the histogram edges
-#
-#     The following is a suggestion, the choice is up to you (will not affect the
-#     grade except for a really bad case, like bins = [0,100])
-#     '''
-#     bins = list(range(0,100,4))
-#     '''
-#     We can plot a histogram of any column of numerical values by the "hist" method of DataFrame
-#     '''
-#
-#     plt.close('Age, all')
-#     plt.figure('Age, all')
-#     df['Age'].hist(bins=bins)
-#
-#
-#     '''
-#     Note, you can also put: bins = 'auto'
-#     df['Age'].hist(bins='auto')
-#
-#     Try it!
-#
-#     '''
-#
-#     #! your code here
-#     #! plot 2 histograms of age: one for those who survived, and one for those that did not
-#     #! Bonus 1: plot 4 histograms of age: for women that survived and not, and for men tat survived and not
-#     #! Bonus 2: plot 6 histograms of age: for survivors and casualties of each of the 3 classes
-#
-#     return
-#
-#
+# # 3.4 Visualizing the distribution of age and its impact on survival
+def survival_vs_age(df):
+    """
+    Here we would like to plot some histograms.
+    Some very basic plotting: run these three commands:
+
+    plt.plot(np.arange(10))
+    plt.plot(np.arange(10)**.5)
+    plt.plot(np.arange(10)**2)
+
+    You should get 3 lines on a single figure. While that is a desirable functionality,
+    things can quickly go out of hand if you do not close or clear your figures.
+
+    To prevent clogging your figures with clutter, you can do one of several things:
+
+    1. put:
+    plt.close('all')
+    at the beginning of this function. This will close all figures, all subsequent plots will be "new"
+
+    2. Naming your figures and closing / clearing them before the first plot in the function.
+
+    2.1. Closing:
+
+    plt.close('abc') # closes figure "abc", no error raised if it does not exist.
+    plt.figure('abc') # opens a brand, empy figure named "abc"
+    plt.plot(...)
+    df[...].hist()
+
+    2.1. clearing:
+
+    Here the order is reversed
+
+    plt.figure('abc') # makes "abc" the active figure, makes a new figure named "abc" if it does not exist
+    plt.clear('abc') # clears the figure "abc", leaving it empty and active to receive plots
+    plt.plot(...)
+    df[...].hist()
+
+
+    Now, back to age histogram (distributions)
+    First, define the histogram edges
+
+    The following is a suggestion, the choice is up to you (will not affect the
+    grade except for a really bad case, like bins = [0,100])
+    """
+    bins = list(range(0, 100, 5))
+    '''
+    We can plot a histogram of any column of numerical values by the "hist" method of DataFrame
+    '''
+    plt.interactive(False)
+    plt.close('Age, all')
+    plt.figure('Age, all')
+
+    '''
+    Note, you can also put: bins = 'auto'
+    df['Age'].hist(bins='auto')
+
+    Try it!
+
+    # '''
+
+    plt.subplot(121)
+    a = df.loc[df.Survived == 1]
+    a.Age.hist(bins=bins)
+    plt.subplot(122)
+    b = df.loc[df.Survived == 0]
+    b.Age.hist(bins=bins)
+
+
+
+    # # # male survived
+    # plt.subplot(221)
+    # a = df.loc[[df.Survived == 1] and [df.Bin_Sex == 1]]
+    # a.Age.hist(bins=bins)
+    # # male dead
+    # plt.subplot(222)
+    # b = df.loc[df.Survived == 0 and df.Bin_Sex == 1]
+    # b.Age.hist(bins=bins)
+
+    # # # female survived
+    # plt.subplot(223)
+    # c = df.loc[df.Survived == 0 and df.Bin_Sex == 0]
+    # c.Age.hist(bins=bins)
+    # # female dead
+    # plt.subplot(224)
+    # d = df.loc[df.Survived == 0 and df.Bin_Sex == 0]
+    # d.Age.hist(bins=bins)
+
+    plt.show()
+
+
+    # ! plot 2 histograms of age: one for those who survived, and one for those that did not
+    # ! Bonus 1: plot 4 histograms of age: for women that survived and not, and for men that survived and not
+    # ! Bonus 2: plot 6 histograms of age: for survivors and casualties of each of the 3 classes
+
+    return
+
+
 # ## 3.5 Correlation of survival to the numerical variables
 # # ['Age', 'SibSp', 'Parch', 'Fare', 'Family']
 # # ['log1p_Age', 'log1p_SibSp', 'log1p_Parch', 'log1p_Fare', 'log1p_Family']
