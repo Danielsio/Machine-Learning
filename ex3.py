@@ -25,6 +25,7 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import sklearn
 
 plt.ion()
 
@@ -546,20 +547,20 @@ def split_data(df_one_hot):
 
 
 # # 4.2 Training and testing!
-def train_logistic_regression(X_train, X_test, y_train, y_test):
+def train_logistic_regression(x_train, x_test, y_train, y_test):
 
 
     from sklearn.model_selection import GridSearchCV
     from sklearn.linear_model import LogisticRegression
 
-    para_grid = {'C' : [0.001, 0.01, 0.1, 1, 10 ,50], # internal regularization parameter of LogisticRegression
-                 'solver' : ['sag', 'saga']}
+    # internal regularization parameter of LogisticRegression
+    para_grid = {'C' : [0.001, 0.01, 0.1, 1, 10 ,50], 'solver' : ['sag', 'saga']}
 
     Logit1 = GridSearchCV(LogisticRegression(penalty='l2' ,random_state=1), para_grid, cv = 5)
 
-    Logit1.fit(X_train, y_train)
+    Logit1.fit(x_train, y_train)
 
-    y_test_logistic = Logit1.predict(X_test)
+    y_test_logistic = Logit1.predict(x_test)
 
     '''
     look at:
@@ -580,10 +581,11 @@ def train_logistic_regression(X_train, X_test, y_train, y_test):
     3. sklearn.metrics.f1_score
 
     '''
-    #! your code here
-    conf_matrix =  <your code here>
-    accuracy =  <your code here>
-    f1_score =  <your code here>
+
+    # ! your code here
+    conf_matrix = sklearn.metrics.confusion_matrix()
+    accuracy = sklearn.metrics.accuracy_score()
+    f1_score = sklearn.metrics.f1_score()
 
     print('acc: ', accuracy, 'f1: ', f1_score)
     print('confusion matrix:\n', conf_matrix)
