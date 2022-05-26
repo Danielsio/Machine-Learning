@@ -530,6 +530,10 @@ def split_data(df_one_hot):
 
     from sklearn.model_selection import train_test_split
 
+    df_one_hot = df_one_hot.drop(["Sex"], axis=1)
+
+    # ["Age", "SibSp", "Emb_Q", "Family", "log1p_SibSp", "Parch", "Cls_2"]
+
     Y = df_one_hot['Survived']
     X = df_one_hot.drop(['Survived'], axis=1)
 
@@ -549,14 +553,13 @@ def split_data(df_one_hot):
 # # 4.2 Training and testing!
 def train_logistic_regression(x_train, x_test, y_train, y_test):
 
-
     from sklearn.model_selection import GridSearchCV
     from sklearn.linear_model import LogisticRegression
 
     # internal regularization parameter of LogisticRegression
-    para_grid = {'C' : [0.001, 0.01, 0.1, 1, 10 ,50], 'solver' : ['sag', 'saga']}
+    para_grid = {'C': [0.001, 0.01, 0.1, 1, 10, 50], 'solver': ['sag', 'saga']}
 
-    Logit1 = GridSearchCV(LogisticRegression(penalty='l2' ,random_state=1), para_grid, cv = 5)
+    Logit1 = GridSearchCV(LogisticRegression(penalty='l2', random_state=1), para_grid, cv=5)
 
     Logit1.fit(x_train, y_train)
 
@@ -583,9 +586,9 @@ def train_logistic_regression(x_train, x_test, y_train, y_test):
     '''
 
     # ! your code here
-    conf_matrix = sklearn.metrics.confusion_matrix()
-    accuracy = sklearn.metrics.accuracy_score()
-    f1_score = sklearn.metrics.f1_score()
+    conf_matrix = sklearn.metrics.confusion_matrix(y_test, y_test_logistic)
+    accuracy = sklearn.metrics.accuracy_score(y_test, y_test_logistic)
+    f1_score = sklearn.metrics.f1_score(y_test, y_test_logistic)
 
     print('acc: ', accuracy, 'f1: ', f1_score)
     print('confusion matrix:\n', conf_matrix)
