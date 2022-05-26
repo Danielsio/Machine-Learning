@@ -25,7 +25,9 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+
 plt.ion()
+
 
 # 1.
 # Familiarization. Download the dataset from the course's website to your pc / colab, and load it
@@ -35,18 +37,18 @@ plt.ion()
 
 
 def load_train_data():
-    
     df_train = pd.read_csv("train.csv")
 
     return df_train
+
 
 # 1.2.
 # Display some data - display the top 10 rows
 
 
 def disp_some_data(df_train):
-
     return df_train.iloc[0:10]
+
 
 # 1.3.
 # In order to know what to do with which columns, we must know what types
@@ -54,7 +56,6 @@ def disp_some_data(df_train):
 
 
 def display_column_data(df_train, max_vals=10):
-
     """
     First, let's investigate the columns in the dataset columns, using the .info() command. For now, we'll deal just
     with int, float and strings.Note that "object" is for string
@@ -85,6 +86,7 @@ def display_column_data(df_train, max_vals=10):
         print('{:s}: '.format(col), dict(df_train[col].value_counts()))
     return
 
+
 # 1.4
 # Now that we know which columns are there, we can drop some of them - the ones that do not carry predictive power.
 # In addition, we will drop columns that we do not know how to handle such as free text.
@@ -92,13 +94,13 @@ def display_column_data(df_train, max_vals=10):
 
 
 def drop_non_inform_columns(df_train):
-
     df_lean = df_train.drop("PassengerId", axis=1)
     df_lean = df_lean.drop("Name", axis=1)
     df_lean = df_lean.drop("Ticket", axis=1)
     df_lean = df_lean.drop("Cabin", axis=1)
 
     return df_lean
+
 
 # 2.
 # Now that we know the basics about our dataset, we can
@@ -109,7 +111,6 @@ def drop_non_inform_columns(df_train):
 
 
 def where_are_the_nans(df_lean):
-
     # ! your code here: print and return the names of the columns that have
     # at least one missing value, and the number of missing values
     # ! store your results in a dict or a series, where the index/key is
@@ -126,13 +127,13 @@ def where_are_the_nans(df_lean):
 
     return cols_with_nans
 
+
 # 2.2
 # We see that the columns 'Age' and 'Embarked' have missing values. We need to fill them.
 # Let's fill 'Age' with the average and 'Embarked' with the most common
 
 
 def fill_titanic_nas(df_lean):
-
     """
     For "Embarked", consider using value_counts() to get (again) the value counts,
     and idxmax() on that result - to get the index in
@@ -149,6 +150,7 @@ def fill_titanic_nas(df_lean):
 
     return df_filled
 
+
 # 2.3
 # Now that we filled up all the missing values, we want to convert the non-numerical (categorical) variables
 # to some numeric representation - so we can apply numerical schemes to it.
@@ -156,7 +158,6 @@ def fill_titanic_nas(df_lean):
 
 
 def encode_one_hot(df_filled):
-
     """
     There are 3 distinct values for "Embarked": "S", "C", "Q". Also, there are 3 classes of tickets.
      While the column "Pclass" is numeric,
@@ -254,13 +255,12 @@ def encode_one_hot(df_filled):
 
 
 # 2.4
-    # There are 2 variables (columns) that reflect co-travelling family of each passenger.
-    # SibSp - the number of sibling - brothers and sisters.
-    # Parch - the total number of parents plus children for each passenger.
-    # We want to reflect the whole family size of each passenger - the sum of SibSp and Parch
-    # It will be useful later
+# There are 2 variables (columns) that reflect co-travelling family of each passenger.
+# SibSp - the number of sibling - brothers and sisters.
+# Parch - the total number of parents plus children for each passenger.
+# We want to reflect the whole family size of each passenger - the sum of SibSp and Parch
+# It will be useful later
 def make_family(df_one_hot):
-
     """
     Introduce a new column with the name "Family", that will be the sum of "SibSp" and "Parch" columns
     """
@@ -283,7 +283,6 @@ def make_family(df_one_hot):
 
 
 def add_log1p(df_one_hot):
-
     # For each of the numeric columns: 'Age', 'SibSp', 'Parch', 'Fare', 'Family'
     # we introduce a new column that starts with the 'log1p_' string: 'log1p_Age',
     # 'log1p_SibSp', 'log1p_Parch', 'log1p_Fare', 'log1p_Family'
@@ -330,7 +329,6 @@ def survival_vs_gender(df):
 # 3.2 The same for survival by class. You can use the "one-hot" encoding,
 # or the original "Pclass" column - whatever more convenient to you.
 def survival_vs_class(df):
-
     df_class1 = df[df['Pclass'] == 1]
     class1_rate = df_class1["Survived"].mean()
 
@@ -352,7 +350,6 @@ def survival_vs_class(df):
 
 # # 3.3 The same, for survival by the 3 family size metrics. Return a dict of (dicts \ series)
 def survival_vs_family(df):
-
     """
     The different family size metrics - "SibSp", "Parch", "Family" are all numeric.
     """
@@ -452,35 +449,25 @@ def survival_vs_age(df):
 
     # '''
 
-    plt.subplot(121)
-    a = df.loc[df.Survived == 1]
+    # male survived
+    plt.subplot(221).title.set_text("male survived")
+    a = df.loc[(df.Survived == 1) & (df.Bin_Sex == 1)]
     a.Age.hist(bins=bins)
-    plt.subplot(122)
-    b = df.loc[df.Survived == 0]
+    # male dead
+    plt.subplot(222).title.set_text("male dead")
+    b = df.loc[(df.Survived == 0) & (df.Bin_Sex == 1)]
     b.Age.hist(bins=bins)
 
-
-
-    # # # male survived
-    # plt.subplot(221)
-    # a = df.loc[[df.Survived == 1] and [df.Bin_Sex == 1]]
-    # a.Age.hist(bins=bins)
-    # # male dead
-    # plt.subplot(222)
-    # b = df.loc[df.Survived == 0 and df.Bin_Sex == 1]
-    # b.Age.hist(bins=bins)
-
-    # # # female survived
-    # plt.subplot(223)
-    # c = df.loc[df.Survived == 0 and df.Bin_Sex == 0]
-    # c.Age.hist(bins=bins)
-    # # female dead
-    # plt.subplot(224)
-    # d = df.loc[df.Survived == 0 and df.Bin_Sex == 0]
-    # d.Age.hist(bins=bins)
+    # # female survived
+    plt.subplot(223).title.set_text("female survived")
+    c = df.loc[(df.Survived == 0) & (df.Bin_Sex == 0)]
+    c.Age.hist(bins=bins)
+    # female dead
+    plt.subplot(224).title.set_text("female dead")
+    d = df.loc[(df.Survived == 0) & (df.Bin_Sex == 0)]
+    d.Age.hist(bins=bins)
 
     plt.show()
-
 
     # ! plot 2 histograms of age: one for those who survived, and one for those that did not
     # ! Bonus 1: plot 4 histograms of age: for women that survived and not, and for men that survived and not
@@ -489,41 +476,44 @@ def survival_vs_age(df):
     return
 
 
-# ## 3.5 Correlation of survival to the numerical variables
-# # ['Age', 'SibSp', 'Parch', 'Fare', 'Family']
-# # ['log1p_Age', 'log1p_SibSp', 'log1p_Parch', 'log1p_Fare', 'log1p_Family']
-# def survival_correlations(df):
+# # 3.5 Correlation of survival to the numerical variables
+# ['Age', 'SibSp', 'Parch', 'Fare', 'Family']
+# ['log1p_Age', 'log1p_SibSp', 'log1p_Parch', 'log1p_Fare', 'log1p_Family']
+
+def survival_correlations(df):
+    """
+    We can compute the correlation of the various numeric columns to survival.
+    This is done by the corr function of DataFrame.
+    """
+
+    corr = df.corr()
+
+    # corr is a DataFrame that represents the correlatio matrix
+    print(corr.Survived)
+
+    # we need only the correlation to the "Survived" column. Also,
+    # we don't need the correlation of "Survived" to itself.
+    # Also, remember, that for inspection purposes, it is the *absolute value* of correlation that's important
+
+    corr_survived = corr.Survived.drop("Survived")
+    corr_survived = corr_survived.abs()
+    corr_survived.sort_values(inplace=True, ascending=False)
+    print('\n', corr_survived)
+    # ! find the 5 most important numerical columns, and print (with sign)
+    # and return their correlation. Use dict or Series
+    important_feats = corr_survived.head().index
+
+    important_corrs = corr.Survived[important_feats]
+
+    print(important_corrs)
+
+    return important_corrs
+
+
+# 4. Predicting survival!!!
+# We're finally ready to build a model and predict survival!
 #
-#     '''
-#     We can compute the correlation of the various numeric columns to survival.
-#     This is done by the corr function of DataFrame.
-#
-#     '''
-#
-#     corr = df.corr()
-#
-#     # corr is a DataFrame that represents the correlatio matrix
-#     print(corr)
-#
-#     # we need only the correlation to the "Survived" column. Also,
-#     we don't need the correlation of "Survived" to itself.
-#     # Also, remember, that for inspection purposes, it is the *absolute value* of correlation that's important
-#
-#     #! your code here
-#     #! find the 5 most important numerical columns, and print (with sign)
-#     and return their correlation. Use dict or Series
-#     important_feats = ...
-#     important_corrs = {'a': 0.9, 'b': -0.8, ...}
-#
-#     print(important_corrs)
-#
-#     return important_corrs
-#
-#
-# # 4. Predicting survival!!!
-# # We're finally ready to build a model and predict survival!
-# #
-# # In this section, df_one_hot should include all the transformations
+# In this section, df_one_hot should include all the transformations
 # and additions we've done to the data, including, of course, the one-hot
 # # encoding of class and port of boarding (Embarked), and the binary "Sex"
 # column, and also with the addition of the log1p scaled variables.
@@ -532,102 +522,70 @@ def survival_vs_age(df):
 # # Based on the correlations of the numeric data to survival, and the impact of
 # the categorical data, you're encouraged to pick the best features
 # # that will yield the best testing results.
-#
-#
-# ## 4.1 split data into train and test sets
-# def split_data(df_one_hot):
-#
-#
-#
-#     from sklearn.model_selection import train_test_split
-#
-#     Y = df_one_hot['Survived']
-#     X = df_one_hot.drop(['Survived'], axis = 1)
-#
-#
-#
-#     X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size = 0.3, random_state=1, stratify = Y)
-#
-#     # This splits the data into a train set, which will be used to calibrate the internal
-#     parameters of predictor, and the test set, which will be used for checking
-#
-#     print(X_train.shape)
-#     print(y_train.shape)
-#     print(X_test.shape)
-#     print(y_test.shape)
-#
-#     return X_train, X_test, y_train, y_test
-#
-#
-# ## 4.2 Training and testing!
-# def train_logistic_regression(X_train, X_test, y_train, y_test):
-#
-#
-#     from sklearn.model_selection import GridSearchCV
-#     from sklearn.linear_model import LogisticRegression
-#
-#     para_grid = {'C' : [0.001, 0.01, 0.1, 1, 10 ,50], # internal regularization parameter of LogisticRegression
-#                  'solver' : ['sag', 'saga']}
-#
-#     Logit1 = GridSearchCV(LogisticRegression(penalty='l2' ,random_state=1), para_grid, cv = 5)
-#
-#     Logit1.fit(X_train, y_train)
-#
-#     y_test_logistic = Logit1.predict(X_test)
-#
-#     '''
-#     look at:
-#     https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html
-#
-#     to interpret y_test_logistic
-#
-#
-#     Now let's see how good our model is. Compute, print and return the following
-#     three performance measures, as taught in class:
-#
-#     1. Confusion matrix
-#     2. Accuracy
-#     3. F1 score
-#
-#     For that, in sklearn.metrics look at:
-#     1. sklearn.metrics.confusion_matrix
-#     2. sklearn.metrics.accuracy_score
-#     3. sklearn.metrics.f1_score
-#
-#
-#     '''
-#
-#     #! your code here
-#     conf_matrix =  <your code here>
-#     accuracy =  <your code here>
-#     f1_score =  <your code here>
-#
-#     print('acc: ', accuracy, 'f1: ', f1_score)
-#     print('confusion matrix:\n', conf_matrix)
-#
-#     return accuracy, f1_score, conf_matrix
-#
-#
-# if __name__ == '__main__':
-#
-#     # an example of the usage of the functions
-#
-#     df_train = load_train_data()
-#     disp_some_data(df_train)
-#     display_column_data(df_train, max_vals = 10)
-#     df_lean = drop_non_inform_columns(df_train)
-#
-#     cols_with_nans = where_are_the_nans(df_lean)
-#     df_filled = fill_titanic_nas(df_lean)
-#     df_one_hot = encode_one_hot(df_filled)
-#     df_one_hot = make_family(df_one_hot)
-#     df_one_hot = add_log1p(df_one_hot)
-#
-#     survived_by_gender = survival_vs_gender(df_one_hot)
-#     survived_by_class = survival_vs_class(df_one_hot)
-#     survived_by_family = survival_vs_family(df_one_hot)
-#     survival_vs_age(df_one_hot)
-#     important_corrs = survival_correlations(df)
-#
-#     X_train, X_test, y_train, y_test = split_data(df_one_hot)
-#     train_logistic_regression(X_train, X_test, y_train, y_test)
+
+
+# # 4.1 split data into train and test sets
+def split_data(df_one_hot):
+
+    from sklearn.model_selection import train_test_split
+
+    Y = df_one_hot['Survived']
+    X = df_one_hot.drop(['Survived'], axis=1)
+
+    X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.3, random_state=1, stratify=Y)
+
+    # This splits the data into a train set, which will be used to calibrate the internal
+    # parameters of predictor, and the test set, which will be used for checking
+
+    print(X_train.shape)
+    print(y_train.shape)
+    print(X_test.shape)
+    print(y_test.shape)
+
+    return X_train, X_test, y_train, y_test
+
+
+# # 4.2 Training and testing!
+def train_logistic_regression(X_train, X_test, y_train, y_test):
+
+
+    from sklearn.model_selection import GridSearchCV
+    from sklearn.linear_model import LogisticRegression
+
+    para_grid = {'C' : [0.001, 0.01, 0.1, 1, 10 ,50], # internal regularization parameter of LogisticRegression
+                 'solver' : ['sag', 'saga']}
+
+    Logit1 = GridSearchCV(LogisticRegression(penalty='l2' ,random_state=1), para_grid, cv = 5)
+
+    Logit1.fit(X_train, y_train)
+
+    y_test_logistic = Logit1.predict(X_test)
+
+    '''
+    look at:
+    https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html
+
+    to interpret y_test_logistic
+
+    Now let's see how good our model is. Compute, print and return the following
+    three performance measures, as taught in class:
+
+    1. Confusion matrix
+    2. Accuracy
+    3. F1 score
+
+    For that, in sklearn.metrics look at:
+    1. sklearn.metrics.confusion_matrix
+    2. sklearn.metrics.accuracy_score
+    3. sklearn.metrics.f1_score
+
+    '''
+    #! your code here
+    conf_matrix =  <your code here>
+    accuracy =  <your code here>
+    f1_score =  <your code here>
+
+    print('acc: ', accuracy, 'f1: ', f1_score)
+    print('confusion matrix:\n', conf_matrix)
+
+    return accuracy, f1_score, conf_matrix
