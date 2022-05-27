@@ -1,8 +1,8 @@
-# Name of student #1:
-# ID of  student #1:
+# Name of student #1: Daniel Sionov
+# ID of  student #1: 318670668
 
-# Name of student #2:
-# ID of  student #2:
+# Name of student #2: Itay Finkelshtein
+# ID of  student #2: 208734509
 
 
 # Download the "Titanic - Machine Learning from Disaster" dataset, either from Kaggle
@@ -594,3 +594,30 @@ def train_logistic_regression(x_train, x_test, y_train, y_test):
     print('confusion matrix:\n', conf_matrix)
 
     return accuracy, f1_score, conf_matrix
+
+
+if __name__ == '__main__':
+
+    # an example of the usage of the functions
+
+    df_train = load_train_data()
+    disp_some_data(df_train)
+    display_column_data(df_train, max_vals = 10)
+    df_lean = drop_non_inform_columns(df_train)
+
+    cols_with_nans = where_are_the_nans(df_lean)
+    df_filled = fill_titanic_nas(df_lean)
+    df_one_hot = encode_one_hot(df_filled)
+    df_one_hot = make_family(df_one_hot)
+    df_one_hot = add_log1p(df_one_hot)
+
+    # survived_by_gender = survival_vs_gender(df_one_hot)
+    # survived_by_class = survival_vs_class(df_one_hot)
+    # survived_by_family = survival_vs_family(df_one_hot)
+    # survival_vs_age(df_one_hot)
+
+    important_corrs = survival_correlations(df_one_hot)
+    print('\n\n', df_one_hot.columns)
+
+    X_train, X_test, y_train, y_test = split_data(df_one_hot)
+    train_logistic_regression(X_train, X_test, y_train, y_test)
