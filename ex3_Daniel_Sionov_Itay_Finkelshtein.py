@@ -608,7 +608,7 @@ if __name__ == '__main__':
 
     df_train = load_train_data()
     disp_some_data(df_train)
-    display_column_data(df_train, max_vals = 10)
+    display_column_data(df_train, max_vals=10)
     df_lean = drop_non_inform_columns(df_train)
 
     cols_with_nans = where_are_the_nans(df_lean)
@@ -618,7 +618,7 @@ if __name__ == '__main__':
     df_one_hot = add_log1p(df_one_hot)
 
     survived_by_gender = survival_vs_gender(df_one_hot)
-    survived_by_class = survival_vs_class(df_one_hot)
+    survived_by_class = survival_vs_class(df_filled)
     survived_by_family = survival_vs_family(df_one_hot)
     survival_vs_age(df_one_hot)
 
