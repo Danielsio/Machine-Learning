@@ -611,10 +611,10 @@ if __name__ == '__main__':
     df_one_hot = make_family(df_one_hot)
     df_one_hot = add_log1p(df_one_hot)
 
-    # survived_by_gender = survival_vs_gender(df_one_hot)
-    # survived_by_class = survival_vs_class(df_one_hot)
-    # survived_by_family = survival_vs_family(df_one_hot)
-    # survival_vs_age(df_one_hot)
+    survived_by_gender = survival_vs_gender(df_one_hot)
+    survived_by_class = survival_vs_class(df_one_hot)
+    survived_by_family = survival_vs_family(df_one_hot)
+    survival_vs_age(df_one_hot)
 
     important_corrs = survival_correlations(df_one_hot)
     print('\n\n', df_one_hot.columns)
