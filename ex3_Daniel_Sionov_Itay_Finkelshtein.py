@@ -384,8 +384,15 @@ def survival_vs_family(df):
     Parch_rate = pd.Series(survived_by_family["Parch"]).mean()
     SibSp_rate = pd.Series(survived_by_family["SibSp"]).mean()
 
-    print("To ensure the highest chance of survival, the metric ", "Family", 'must have the value ', Family_rate)
-    # check if works fine
+    if Family_rate >= Parch_rate and Family_rate >= SibSp_rate:
+        metric = "Family"
+    elif Parch_rate >= Family_rate and Parch_rate >= SibSp_rate:
+        metric = "Parch"
+    else:
+        metric = "SibSp"
+
+    print("To ensure the highest chance of survival, the metric ", metric, ' must have the value ',
+          max(Family_rate, Parch_rate, SibSp_rate))
 
     return survived_by_family
 
