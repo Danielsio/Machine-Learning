@@ -384,8 +384,14 @@ def survival_vs_family(df):
     Parch_rate = pd.Series(survived_by_family["Parch"]).mean()
     SibSp_rate = pd.Series(survived_by_family["SibSp"]).mean()
 
-    print("To ensure the highest chance of survival, the metric ", "Family", 'must have the value ', Family_rate)
-    # check if works fine
+    if Family_rate >= Parch_rate and Family_rate >= SibSp_rate:
+        metric = "Family"
+    elif Parch_rate >= Family_rate and Parch_rate >= SibSp_rate:
+        metric = "Parch"
+    else:
+        metric = "SibSp"
+
+    print("To ensure the highest chance of survival, the metric ", metric, ' must have the value ', max(Family_rate, Parch_rate, SibSp_rate))
 
     return survived_by_family
 
@@ -611,10 +617,10 @@ if __name__ == '__main__':
     df_one_hot = make_family(df_one_hot)
     df_one_hot = add_log1p(df_one_hot)
 
-    # survived_by_gender = survival_vs_gender(df_one_hot)
-    # survived_by_class = survival_vs_class(df_one_hot)
-    # survived_by_family = survival_vs_family(df_one_hot)
-    # survival_vs_age(df_one_hot)
+    survived_by_gender = survival_vs_gender(df_one_hot)
+    survived_by_class = survival_vs_class(df_one_hot)
+    survived_by_family = survival_vs_family(df_one_hot)
+    survival_vs_age(df_one_hot)
 
     important_corrs = survival_correlations(df_one_hot)
     print('\n\n', df_one_hot.columns)
